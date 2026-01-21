@@ -1,0 +1,9 @@
+worker_class = "uvicorn.workers.UvicornWorker"
+bind = "0:8080"
+workers = 8
+timeout = 120
+accesslog = "/app/log/gunicorn/access.log"
+errorlog = "/app/log/gunicorn/error.log"
+loglevel = "info"
+capture_output = True
+pidfile = "/var/run/gunicorn/gunicorn.pid"

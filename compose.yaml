@@ -1,0 +1,19 @@
+name: texo
+
+services:
+  server:
+    image: texo/server:v0.1
+    pull_policy: build
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8080"
+    shm_size: 10gb
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 5
+        window: 60s
+    command: bash -c "uv run gunicorn -c /app/middleware.py server:app"

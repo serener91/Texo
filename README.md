@@ -84,6 +84,6 @@ Cursor와 IDE에서 원하는 LLM 모델을 코딩 어시스턴트로 활용하�
 
 *   **Observability**: Langfuse
 *   **LLM Integration**: OpenAI or OpenAI compatible server
-*   **Backend**: FastAPI
+*   **Backend/Server**: FastAPI, Gunicorn
 *   **Infrastructure**: Docker
 *   **Language**: Python

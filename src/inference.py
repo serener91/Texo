@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 from utils import get_logger
 
-logger = get_logger(name="inference", log_file="./inference.log")
+logger = get_logger(name="inference", log_file="../logs/inference.log")
 
 load_dotenv()
 
@@ -85,16 +85,17 @@ def chat_completion_api(
         str: Text chunks from the streaming response
     """
     try:
-        # Highly recommend keeping configs separately
-        model_routers = {
-            "gpt-oss-120b": os.getenv("LOCAL_SERVER_2"),
-            "Devstral-Small-2-24B-Instruct-2512": os.getenv("LOCAL_SERVER_1"),
-            "Qwen3-VL-30B-A3B-Thinking": os.getenv("LOCAL_SERVER_1")
-        }
-
         if os.getenv("OPENAI_API_KEY") is not None:
             client = OpenAI()
         else:
+            # Add your model or use OpenAI
+            # Highly recommend keeping configs separately
+            model_routers = {
+                "gpt-oss-120b": os.getenv("LOCAL_SERVER_2"),
+                "Devstral-Small-2-24B-Instruct-2512": os.getenv("LOCAL_SERVER_1"),
+                "Qwen3-VL-30B-A3B-Thinking": os.getenv("LOCAL_SERVER_1")
+            }
+
             client = OpenAI(
                 base_url=model_routers.get(model_nm, os.getenv("LOCAL_SERVER_1")),
                 api_key=os.getenv("LOCAL_API_KEY")
@@ -139,7 +140,6 @@ def chat_completion_api(
                         # Parse reasoning tokens
                         if hasattr(chunk.choices[0].delta, "reasoning") and chunk.choices[0].delta.reasoning is not None:
                             reasoning_content += chunk.choices[0].delta.reasoning
-                            # print(chunk.choices[0].delta.reasoning, end="", flush=True)
 
                         if chunk.choices[0].delta.content:
                             text = chunk.choices[0].delta.content
@@ -185,7 +185,7 @@ if __name__ == '__main__':
     print(trace_id)
 
     for c in chat_completion_api(
-            model_nm="gpt-oss-120b",
+            model_nm="Qwen3-VL-30B-A3B-Thinking",
             messages=msg,
             user_id=u_id,
             session_id=s_id,

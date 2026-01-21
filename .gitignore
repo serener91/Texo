@@ -5,6 +5,7 @@ __pycache__/
 
 /lab
 .idea/
+.log
 
 # C extensions
 *.so

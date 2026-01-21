@@ -9,10 +9,10 @@ import json
 import requests
 import argparse
 from typing import List, Dict, Optional, Generator
-from logging_config import get_logger
+from utils import get_logger
 
 # Set up logger
-logger = get_logger("openai_api_client", log_file="./openai_api_client.log")
+logger = get_logger("openai_api_client", log_file="../logs/openai_api_client.log")
 
 
 class OpenAICompatibleClient:
@@ -22,7 +22,7 @@ class OpenAICompatibleClient:
             self,
             base_url: str = "http://localhost:8000/v1",
             api_key: str = "sk-user1",
-            model: str = "gpt-oss-120b",
+            model: str = "Qwen3-VL-30B-A3B-Thinking",
             timeout: int = 30
     ):
         """
@@ -31,6 +31,7 @@ class OpenAICompatibleClient:
         Args:
             base_url: Base URL of the API server (without trailing slash)
             api_key: API key for authentication
+            model: Your model name
             timeout: Request timeout in seconds
         """
         self.base_url = base_url.rstrip('/')
@@ -261,7 +262,7 @@ def main():
     )
     parser.add_argument(
         "--base-url",
-        default=os.getenv("API_BASE_URL", "http://localhost:8000/v1"),
+        default=os.getenv("API_BASE_URL", "http://172.30.1.102:10080/v1"),
         help="Base URL of the API server"
     )
     parser.add_argument(
