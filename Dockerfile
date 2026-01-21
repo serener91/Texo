@@ -16,6 +16,9 @@ RUN uv add python-dotenv fastapi===0.128.0 uvicorn==0.40.0 gunicorn==23.0.0 open
 
 RUN mkdir -p /app/log/gunicorn && mkdir -p /var/run/gunicorn
 
-COPY . .
+#COPY . .
+COPY /src /app
+COPY logs /app
+COPY .env /app
 
 CMD ["tail", "-f", "/dev/null"]
