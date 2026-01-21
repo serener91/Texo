@@ -119,7 +119,8 @@ def chat_completion_api(
         ):
 
             chat_response = client.chat.completions.create(
-                model=os.getenv("LOCAL_MODEL", "gpt-5.1"),
+                # model=model_nm if model_nm is not None else "gpt-5.1",
+                model="llm" if model_nm == "gpt-oss-120b" else model_nm,
                 messages=messages,
                 stream=True,
                 stream_options={"include_usage": True},
@@ -185,7 +186,7 @@ if __name__ == '__main__':
     print(trace_id)
 
     for c in chat_completion_api(
-            model_nm="Qwen3-VL-30B-A3B-Thinking",
+            model_nm="gpt-oss-120b",
             messages=msg,
             user_id=u_id,
             session_id=s_id,

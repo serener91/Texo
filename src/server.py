@@ -20,7 +20,7 @@ from dotenv import load_dotenv
 from inference import chat_completion_api
 from utils import get_logger
 
-load_dotenv(dotenv_path="/app/.env")
+load_dotenv()
 
 # Set up a logger
 logger = get_logger("openai_api_server", log_file="../logs/openai_api_server.log")

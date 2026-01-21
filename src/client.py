@@ -21,8 +21,8 @@ class OpenAICompatibleClient:
     def __init__(
             self,
             base_url: str = "http://localhost:8000/v1",
-            api_key: str = "sk-user1",
-            model: str = "Qwen3-VL-30B-A3B-Thinking",
+            api_key: str = "sk-master",
+            model: str = "gpt-oss-120b",
             timeout: int = 30
     ):
         """
@@ -262,17 +262,17 @@ def main():
     )
     parser.add_argument(
         "--base-url",
-        default=os.getenv("API_BASE_URL", "http://172.30.1.102:10080/v1"),
+        default=os.getenv("API_BASE_URL", "http://localhost:30080/v1"),
         help="Base URL of the API server"
     )
     parser.add_argument(
         "--api-key",
-        default=os.getenv("API_KEY", "sk-user1"),
+        default=os.getenv("API_KEY", "sk-master"),
         help="API key for authentication"
     )
     parser.add_argument(
         "--prompt",
-        default="Hello, who are you?",
+        default="List important Python features related to system design.",
         help="Prompt to send to the model"
     )
     parser.add_argument(
@@ -300,7 +300,7 @@ def main():
     print(f"\nConnecting to: {args.base_url}")
     print(f"Using API key: {args.api_key[:10]}...")
 
-    # Run tests based on mode
+    # Run tests based on the mode
     try:
         if args.mode == "streaming" or args.mode == "all":
             test_streaming(client, args.prompt)

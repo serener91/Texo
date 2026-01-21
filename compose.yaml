@@ -8,7 +8,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "10080:8080"
+      - "30080:8080"
     shm_size: 10gb
     deploy:
       restart_policy:
