@@ -1,8 +1,3 @@
-"""
-OpenAI-compatible API client for testing the server.
-Supports both streaming and non-streaming chat completions.
-"""
-
 import os
 import sys
 import json
@@ -21,8 +16,8 @@ class OpenAICompatibleClient:
     def __init__(
             self,
             base_url: str = "http://localhost:8000/v1",
-            api_key: str = "sk-user1",
-            model: str = "Qwen3-VL-30B-A3B-Thinking",
+            api_key: str = "sk-username",
+            model: str = "your model name",
             timeout: int = 30
     ):
         """

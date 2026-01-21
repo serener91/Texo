@@ -1,13 +1,4 @@
-"""
-OpenAI-compatible API server with:
-- Bearer token authentication
-- Streaming and non-streaming chat completions
-- Langfuse integration via utils.py
-- Request validation with Pydantic
-"""
-
 from typing import List, Optional, Dict, Any
-import uvicorn
 import time
 import os
 import json
@@ -354,7 +345,3 @@ async def create_chat_completion(
                 total_tokens=prompt_tokens+completion_tokens
             )
         )
-
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)

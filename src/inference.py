@@ -12,21 +12,8 @@ logger = get_logger(name="inference", log_file="../logs/inference.log")
 
 load_dotenv()
 
-# Set False to disable tracing
-os.environ["LANGFUSE_TRACING_ENABLED"] = "True"
-
-# Set environment tag
-os.environ["LANGFUSE_TRACING_ENVIRONMENT"] = ["production", "staging", "development"][-1]
-
 # Load Langfuse client
 langfuse = get_client()
-
-# Checks the connection with the server (remove this for production)
-if langfuse.auth_check():
-    logger.info("Langfuse client is authenticated and ready!")
-else:
-    logger.info("Authentication failed. Please check your credentials and host.")
-
 
 def generate_deterministic_trace_id(session_id: str, turn_num: int) -> str:
     """
@@ -88,16 +75,13 @@ def chat_completion_api(
         if os.getenv("OPENAI_API_KEY") is not None:
             client = OpenAI()
         else:
-            # Add your model or use OpenAI
-            # Highly recommend keeping configs separately
+            # Add your model or use OpenAI (Highly recommend keeping configs separately for production)
             model_routers = {
-                "gpt-oss-120b": os.getenv("LOCAL_SERVER_2"),
-                "Devstral-Small-2-24B-Instruct-2512": os.getenv("LOCAL_SERVER_1"),
-                "Qwen3-VL-30B-A3B-Thinking": os.getenv("LOCAL_SERVER_1")
+                "gpt-oss-120b": os.getenv("LOCAL_SERVER")
             }
 
             client = OpenAI(
-                base_url=model_routers.get(model_nm, os.getenv("LOCAL_SERVER_1")),
+                base_url=model_routers.get(model_nm, os.getenv("LOCAL_SERVER")),
                 api_key=os.getenv("LOCAL_API_KEY")
             )
 
@@ -123,11 +107,7 @@ def chat_completion_api(
                 messages=messages,
                 stream=True,
                 stream_options={"include_usage": True},
-                **kwargs,
-                extra_body={
-                    "reasoning_effort": "high",
-                    # "chat_template_kwargs": {"enable_thinking": True}
-                }
+                **kwargs
             )
 
             with langfuse.start_as_current_observation(
@@ -171,28 +151,3 @@ def chat_completion_api(
         traceback.print_exc()
         langfuse.update_current_generation(level="ERROR", status_message=str(e))
         yield f"[ERROR: {str(e)}]"
-
-
-if __name__ == '__main__':
-    msg = [
-        {"role": "user", "content": "안녕"}
-    ]
-
-    turn_number = get_conversation_turn(msg)
-    u_id = ["anonymous", "alpha"][-1]
-    s_id = f"chat-{u_id}-{datetime.now().strftime('%Y-%m-%d')}"
-    trace_id = generate_deterministic_trace_id(s_id, turn_number)
-    print(trace_id)
-
-    for c in chat_completion_api(
-            model_nm="Qwen3-VL-30B-A3B-Thinking",
-            messages=msg,
-            user_id=u_id,
-            session_id=s_id,
-            # langfuse_trace_id=trace_id,
-
-    ):
-        print(c, end="", flush=True)
-    print()
-
-    langfuse.flush()
